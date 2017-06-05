@@ -1,3 +1,5 @@
+// Beginning of code
+
 /*
  *   Welcome to ECLIDU! -- Easy Command Line Interface Disk Utility
  *   This program is used for listing mounted drives, formatting drives, writing files to drives to make a live USB,
@@ -36,14 +38,14 @@ void aboutcout() {
 		"and mounting drives. ECLIDU takes all of these commands and puts them\ninto one program. What makes ECLIDU"
 		"different from other disk\nmanagement programs is it is easier to use and it can write .iso and\n.img files to a flashdrive."
 		"This is an all-in-one disk utility\nfor Linux amatuers and experts alike, and for those that like using the\n"
-		"command line but don't want to have a hard time doing so.\n"
-		"ECLIDU --  Easy Command Line Interface Disk Utility Copyright (C) 2016  Austin Tyler Wade Malone\n"
-		"This program is free software: you can redistribute it and/or modify it under the terms of the\n"
-		"GNU General Public License as published by the Free Software Foundation, either version 3 of \n"
-		"the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, \n"
-		"but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  \n"
-		"See the GNU General Public License for more details. You should have received a copy of the GNU General Public License \n"
-		"along with this program.  If not, see <http://www.gnu.org/licenses/>. Email: malone.austin.t@gmail.com" << endl;
+		"command line but don't want to have a hard time doing so.\n\n"
+		"ECLIDU -- Easy Command Line Interface Disk Utility:\nCopyright (C) 2016  Austin Tyler Wade Malone\n"
+		"This program is free software: you can redistribute\nit and/or modify it under the terms of the\n"
+		"GNU General Public License as published by the\nFree Software Foundation, either version 3 of \n"
+		"the License, or (at your option) any later version.\nThis program is distributed in the hope that it will be useful, \n"
+		"but WITHOUT ANY WARRANTY; without even the\nimplied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  \n"
+		"See the GNU General Public License for more details.\nYou should have received a copy of the GNU General Public License \n"
+		"along with this program.  If not, see <http://www.gnu.org/licenses/>.\nDev Email: <malone.austin.t@gmail.com>" << endl;
 }
 
 // add more filesystems maybe?
@@ -99,6 +101,7 @@ void unmount() {
 	cout << "Please select the device you want to unmount. (e.g. /dev/sdb):" << endl;
 	cin >> ansUmount;
 	system (("sudo umount -f " + ansUmount).c_str());
+  cout << ansUmount << endl;
 }
 
 void mount() {
@@ -123,6 +126,8 @@ void write() {
 	system (("sudo chmod 777 " + ansDrive).c_str());
 	system (("sudo dd if=" + ansWrite + " of=" + ansDrive).c_str());
 }
+
+int main();
 
 void switchstate() {
 	string ans;
@@ -157,17 +162,22 @@ void switchstate() {
 			break;
 		case 'x':
 		case 'X':
+			system ("clear");
+			cout << "\nGoodbye! - ECLIDU\n" << endl;
 			exit (EXIT_SUCCESS);
 		default:
-			cout << "\nYou entered an invalid command. Please try again." << endl;
+      cout << endl;
+			system ("clear");
+			//cout << "\nYou entered an invalid command. Please try again." << endl;
 	}
-	menu();
-	switchstate();
+  main();
 }
 
 int main() {
-	cout << "Welcome to ECLIDU! -- Easy Command Line Interface Disk Utility!" << endl;
-
 	menu();
 	switchstate();
+
+  return 0;
 }
+
+// End of code
