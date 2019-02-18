@@ -28,12 +28,9 @@
  */
 
 #include <iostream>
-#include<bits/stdc++.h>
+#include <string>
 #include <cstdlib>
 using namespace std;
-void clear() {
-	system ("clear");
-}
 
 void aboutcout() {
 	cout << "\nWelcome to ECLIDU! -- Easy Command Line Interface Disk Utility\n\n"
@@ -42,7 +39,6 @@ void aboutcout() {
 		"different from other disk\nmanagement programs is it is easier to use and it can write .iso and\n.img files to a flashdrive."
 		"This is an all-in-one disk utility\nfor Linux amatuers and experts alike, and for those that like using the\n"
 		"command line but don't want to have a hard time doing so.\n\n"
-		"\t\t\t**LICENSE**\n"
 		"ECLIDU -- Easy Command Line Interface Disk Utility:\nCopyright (C) 2016  Austin Tyler Wade Malone\n"
 		"This program is free software: you can redistribute\nit and/or modify it under the terms of the\n"
 		"GNU General Public License as published by the\nFree Software Foundation, either version 3 of \n"
@@ -50,35 +46,6 @@ void aboutcout() {
 		"but WITHOUT ANY WARRANTY; without even the\nimplied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  \n"
 		"See the GNU General Public License for more details.\nYou should have received a copy of the GNU General Public License \n"
 		"along with this program.  If not, see <http://www.gnu.org/licenses/>.\nDev Email: <malone.austin.t@gmail.com>" << endl;
-}
-
-void virt() {
-	// fallocate -l 'storage' fake.img
-	// mkfs -t ext4 usb.img
-	// mkdir /media/mount
-	// mount -t auto -o 'name of dir e.g loop' usb.img /media/usb
-	int amtStor;
-	string fileNm, fileSys, mntPnt, driveNm, space = " ";
-	cout << "How big do you want your drive? E.g. 100m, 100g, etc..\n~> ";
-	cin >> amtStor;
-	clear();
-	cout << "Name for file inside drive\n~> ";
-	cin >> fileNm;
-	clear();
-	cout << "What kind of filesystem? \n~> ";
-	cin >> fileSys;
-	clear();
-	cout << "Name for mount point\n~> ";
-	cin >> mntPnt;
-	clear();
-	cout << "Name of drive\n~> ";
-	cin >> driveNm;
-	clear();
-
-	system (("fallocate -l " + amtStor + space + fileNm).c_str());
-	system (("mkfs -t " + fileSys + " " + fileNm).c_str());
-	system (("mkdir /media/" + mntPnt).c_str());
-	system (("mount -t auto -o " + driveNm + " " + fileNm + " /media/" + mntPnt).c_str());
 }
 
 // add more filesystems maybe?
@@ -99,35 +66,24 @@ void fsswitch() {
 
 	switch (fsAns) {
 		case 1:
-			system (("sudo mkfs -t vfat " + fsAnsDrive).c_str());
+			system (("sudo mkfs.vfat -I " + fsAnsDrive).c_str());
 			break;
 		case 2:
-			system (("sudo mkfs -t ext4 " + fsAnsDrive).c_str());
+			system (("sudo mkfs.ext4 -I " + fsAnsDrive).c_str());
 			break;
 		case 3:
-			system (("sudo mkfs -t ext3 " + fsAnsDrive).c_str());
+			system (("sudo mkfs.ext3 -I " + fsAnsDrive).c_str());
 			break;
 		case 4:
-			system (("sudo mkfs -t ext2 " + fsAnsDrive).c_str());
+			system (("sudo mkfs.ext2 -I " + fsAnsDrive).c_str());
 			break;
-		case 5:
-			system (("sudo mkfs -t bfs " + fsAnsDrive).c_str());
-			break;
-		case 6:
-			system (("sudo mkfs -t btrfs " + fsAnsDrive).c_str());
-			break;
-		case 7:
-			system (("sudo mkfs -t exfat " + fsAnsDrive).c_str());
-			break;
-		case 8:
-			system (("sudo mkfs -t " + fsAnsDrive).c_str());
 		default:
 			cout << "\nYou entered an invalid command. Please try again." << endl;
 	}
 }
 
 void menu() {
-	cout << "\n\t\t\t\e[1mECLIDU Menu:\e[0m\n";
+	cout << "\n\e[1mECLIDU Menu:\e[0m";
 	cout << "\nl (List mounted storage devices and partitions with fdisk)\n"
 		"u (Unmount storage device and/or partition)\nm (Mount storage device and/or partition)\n"
 		"f (Format storage device and/or partition)\n"
@@ -136,31 +92,24 @@ void menu() {
 		"(Note: You can hit CTRL+C at any time to end an operation)\n~> ";
 }
 
-void listVol() {
+void list() {
 	system ("sudo fdisk -l");
 }
 
-string unmount() {
+void unmount() {
 	string ansUmount;
 	system ("sudo fdisk -l");
 	cout << "Please select the device you want to unmount. (e.g. /dev/sdb):" << endl;
 	cin >> ansUmount;
 	system (("sudo umount -f " + ansUmount).c_str());
-  	cout << ansUmount << endl;
-  	cin.clear();
-
-  	return ansUmount;
+  cout << ansUmount << endl;
 }
 
-string mount() {
+void mount() {
 	string ansMount;
 	cout << "Please select the drive you want to mount. (e.g. /dev/sdb): ";
 	cin >> ansMount;
-	system (("sudo mount -t auto -o loop usb.img " + ansMount).c_str());
-	cout << ansMount << endl;
-	cin.clear();
-
-	return ansMount;
+	system (("sudo mount " + ansMount).c_str());
 }
 
 void filesystem() {
@@ -169,7 +118,7 @@ void filesystem() {
 	fsswitch();
 }
 
-string write() {
+void write() {
 	string ansWrite, ansDrive;
 	cout << "Please enter the path to the file. (e.g. /home/user/Downloads/file.iso): ";
 	cin >> ansWrite;
@@ -177,21 +126,12 @@ string write() {
 	cin >> ansDrive;
 	system (("sudo chmod 777 " + ansDrive).c_str());
 	system (("sudo dd if=" + ansWrite + " of=" + ansDrive).c_str());
-	cin.clear();
-
-	return ansWrite, ansDrive;
 }
 
-void clearWrk() {
-	system ("clear");
-	cout << "\n\t\t\t\e[1mECLIDU: Working...\e[0m\n";
+void clear() {
+	system("clear");
+	cout << "\n\e[1mECLIDU: Working...\e[0m\n";
 }
-
-/*
-void bugs(string comm) {
-	system ("sudo echo \"" + comm + "\" >");
-}
-*/
 
 int main();
 
@@ -200,47 +140,41 @@ void menuselect() {
 	getline (cin,ans);
 
 	switch (ans[0]) {
-		/*case 'b':
-			clearWrk();
-			string bug;
-			cout << "\nPlease submit any bugs here:\n~> " << endl;
-			cin >> bug;
-			bugs(bug);
-			break;*/
-		case 'v':
-		case 'V':
-			virt();
+		case 'b':
+			clear();
+			cout << "\nPlease submit any bugs here:" << endl;
+			// NEED bug section!!!!
 			break;
 		case 'l':
 		case 'L':
-			clearWrk();
+			clear();
 			cout << endl;
-			listVol();
+			list();
 			break;
 		case 'u':
 		case 'U':
-			clearWrk();
+			clear();
 			cout << endl;
 			unmount();
 			break;
 		case 'm':
 		case 'M':
-			clearWrk();
+			clear();
 			mount();
 			break;
 		case 'f':
 		case 'F':
-			clearWrk();
+			clear();
 			filesystem();
 			break;
 		case 'w':
 		case 'W':
-			clearWrk();
+			clear();
 			write();
 			break;
 		case 'a':
 		case 'A':
-			clearWrk();
+			clear();
 			aboutcout();
 			break;
 		case 'x':
@@ -248,10 +182,10 @@ void menuselect() {
 			system ("clear");
 			cout << "\nGoodbye! - ECLIDU\n" << endl;
 			exit (EXIT_SUCCESS);
-			break;
 		default:
+      cout << endl;
 			system ("clear");
-			cout << "You fucked up big time!" << endl;
+			//cout << "\nYou entered an invalid command. Please try again." << endl;
 	}
   main();
 }
